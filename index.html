@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260819-5">
+  <link rel="stylesheet" href="css/styles.css?v=20260819-10">
 </head>
 <body>
   <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -17,7 +17,7 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Живи и работай в Татарстане — на главную">
-        <span class="brand-mark" aria-hidden="true">Т</span>
+        <span class="brand-symbol" aria-hidden="true"><span class="brand-circle-red"></span><span class="brand-circle-green"></span></span>
         <span class="brand-copy"><strong>Живи и работай</strong><small>в Татарстане</small></span>
       </a>
       <button class="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
@@ -34,12 +34,7 @@
   </header>
 
   <main id="main">
-    <div class="demo-notice" role="note">
-      <div class="container"><strong>Демонстрационная версия</strong><span>Вакансии, истории и контакты используются для проверки сценариев и требуют официального подтверждения перед публикацией.</span></div>
-    </div>
     <section class="hero">
-      <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
-      <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
           <span class="eyebrow">Республика Татарстан</span>
@@ -59,19 +54,8 @@
           </div>
         </div>
 
-        <div class="hero-visual" aria-label="Возможности для жизни и карьеры в Татарстане">
-          <div class="sun" aria-hidden="true"></div>
-          <div class="skyline skyline-back" aria-hidden="true"></div>
-          <div class="skyline skyline-front" aria-hidden="true"></div>
-          <div class="hero-badge hero-badge-jobs">
-            <span class="badge-icon">↗</span>
-            <div><strong id="hero-vacancy-count">—</strong><small>вакансий в демокаталоге</small></div>
-          </div>
-          <div class="hero-badge hero-badge-support">
-            <span class="badge-icon">₽</span>
-            <div><strong id="hero-support-count">—</strong><small>направления поддержки</small></div>
-          </div>
-          <div class="place-label"><span>●</span> Казань · Татарстан</div>
+        <div class="hero-showcase" aria-label="Рекомендуемые вакансии с поддержкой переезда">
+          <article class="hero-opportunity-card" id="hero-opportunity-card" aria-live="polite"></article>
         </div>
       </div>
       <div class="container stats-row" aria-label="Наполнение демонстрационной версии">
@@ -163,10 +147,10 @@
       <div class="container">
         <div class="section-heading centered-heading"><span class="eyebrow">Простой маршрут</span><h2>От интереса до переезда — четыре шага</h2></div>
         <ol class="steps-list">
-          <li><span>01</span><div><h3>Найдите вакансию</h3><p>Используйте поиск и фильтры по профессии, району и условиям.</p></div></li>
-          <li><span>02</span><div><h3>Откликнитесь</h3><p>Оставьте контакты — работодатель свяжется и расскажет детали.</p></div></li>
-          <li><span>03</span><div><h3>Получите поддержку</h3><p>Специалист подберёт подходящие меры и поможет с документами.</p></div></li>
-          <li><span>04</span><div><h3>Начните новую главу</h3><p>Переезжайте, выходите на работу и обустраивайтесь на новом месте.</p></div></li>
+          <li><a class="step-card" href="#vacancies"><span class="step-card-top"><span class="step-number">01</span><span class="step-icon" aria-hidden="true">⌕</span></span><span class="step-card-content"><strong>Найдите вакансию</strong><span>Используйте поиск и фильтры по профессии, району и условиям.</span></span><span class="step-card-link">Перейти к вакансиям <span aria-hidden="true">→</span></span></a></li>
+          <li><a class="step-card" href="#vacancies"><span class="step-card-top"><span class="step-number">02</span><span class="step-icon" aria-hidden="true">↗</span></span><span class="step-card-content"><strong>Откликнитесь</strong><span>Выберите предложение и оставьте отклик из карточки вакансии.</span></span><span class="step-card-link">Выбрать предложение <span aria-hidden="true">→</span></span></a></li>
+          <li><a class="step-card" href="#support"><span class="step-card-top"><span class="step-number">03</span><span class="step-icon" aria-hidden="true">₽</span></span><span class="step-card-content"><strong>Получите поддержку</strong><span>Специалист подберёт подходящие меры и поможет с документами.</span></span><span class="step-card-link">Посмотреть меры <span aria-hidden="true">→</span></span></a></li>
+          <li><a class="step-card" href="#consultation"><span class="step-card-top"><span class="step-number">04</span><span class="step-icon" aria-hidden="true">✓</span></span><span class="step-card-content"><strong>Начните новую главу</strong><span>Получите консультацию, подготовьтесь к переезду и выходу на работу.</span></span><span class="step-card-link">Получить консультацию <span aria-hidden="true">→</span></span></a></li>
         </ol>
       </div>
     </section>
@@ -240,6 +224,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="js/data.js?v=20260819-3"></script>
-  <script src="js/app.js?v=20260819-3"></script>
+  <script src="js/app.js?v=20260819-4"></script>
 </body>
 </html>

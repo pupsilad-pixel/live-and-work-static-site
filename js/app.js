@@ -5,6 +5,7 @@
   const state = {
     visible: 6,
     storyIndex: 0,
+    heroIndex: 0,
     favorites: new Set(JSON.parse(localStorage.getItem('favoriteVacancies') || '[]')),
     filters: { query: '', category: 'all', region: 'all', experience: 'all', support: false, sort: 'recommended' }
   };
@@ -94,8 +95,6 @@
 
   function renderStats() {
     const categories = new Set(data.vacancies.map(v => v.category));
-    $('#hero-vacancy-count').textContent = data.vacancies.length;
-    $('#hero-support-count').textContent = data.support.length;
     $('#stats-regions').textContent = data.regions.length;
     $('#stats-categories').textContent = categories.size;
     $('#stats-support').textContent = data.support.length;
@@ -103,7 +102,47 @@
   }
 
   function salaryLabel(vacancy) {
-    return vacancy.salaryTo ? `${money(vacancy.salaryFrom)}–${money(vacancy.salaryTo).replace(' ₽','')}` : `от ${money(vacancy.salaryFrom)}`;
+    const format = value => new Intl.NumberFormat('ru-RU').format(value);
+    return vacancy.salaryTo ? `${format(vacancy.salaryFrom)}–${format(vacancy.salaryTo)} ₽` : `от ${money(vacancy.salaryFrom)}`;
+  }
+
+  function heroVacancies() {
+    const featured = data.vacancies.filter(vacancy => vacancy.featured && vacancy.support);
+    return featured.length ? featured : data.vacancies.filter(vacancy => vacancy.support).slice(0,3);
+  }
+
+  function renderHeroOpportunity() {
+    const vacancies = heroVacancies();
+    state.heroIndex = (state.heroIndex + vacancies.length) % vacancies.length;
+    const vacancy = vacancies[state.heroIndex];
+    const region = data.regions.find(item => item.name === vacancy.region);
+    const cover = region ? regionImageSet(region)[0] : placeholderImages.urban;
+    const benefits = vacancy.benefits.slice(0,2);
+    $('#hero-opportunity-card').innerHTML = `
+      <header class="hero-opportunity-head">
+        <span class="hero-opportunity-kicker">Вакансия с поддержкой</span>
+        <div class="hero-slide-controls">
+          <span class="hero-slide-count">${state.heroIndex + 1} из ${vacancies.length}</span>
+          <button type="button" data-hero-direction="prev" aria-label="Предыдущая рекомендуемая вакансия">←</button>
+          <button type="button" data-hero-direction="next" aria-label="Следующая рекомендуемая вакансия">→</button>
+        </div>
+      </header>
+      ${region ? `<button class="hero-city-media" type="button" data-region="${region.id}" aria-label="Открыть паспорт территории: ${escapeHTML(region.name)}"><img src="${cover}" alt="${escapeHTML(region.name)}" loading="eager"><span class="hero-city-caption"><span><strong>${escapeHTML(region.name)}</strong><small>${escapeHTML(region.type)}</small></span><span>О городе →</span></span></button>` : ''}
+      <div class="hero-opportunity-body">
+        <span class="hero-opportunity-category">${escapeHTML(vacancy.category)}</span>
+        <h2>${escapeHTML(vacancy.title)}</h2>
+        <p class="hero-opportunity-company">${escapeHTML(vacancy.company)}</p>
+        <div class="hero-opportunity-facts">
+          <div class="hero-opportunity-fact"><small>Зарплата в месяц</small><strong>${salaryLabel(vacancy)}</strong></div>
+          <div class="hero-opportunity-fact"><small>Формат и опыт</small><strong>${escapeHTML(vacancy.format)} · ${escapeHTML(vacancy.experience)}</strong></div>
+        </div>
+        <div class="hero-benefits" aria-label="Поддержка работодателя">${benefits.map(benefit => `<span>✓ ${escapeHTML(benefit)}</span>`).join('')}</div>
+        <div class="hero-opportunity-actions">
+          <button class="button" type="button" data-vacancy="${vacancy.id}">Посмотреть вакансию</button>
+          <button class="button button-secondary" type="button" data-hero-region-jobs="${escapeHTML(vacancy.region)}">Вакансии города</button>
+        </div>
+      </div>
+      <div class="hero-slide-dots" aria-label="Выбор рекомендуемой вакансии">${vacancies.map((item,index) => `<button class="${index === state.heroIndex ? 'active' : ''}" type="button" data-hero-slide="${index}" aria-label="${escapeHTML(item.title)}" aria-pressed="${index === state.heroIndex}"></button>`).join('')}</div>`;
   }
 
   function filteredVacancies() {
@@ -295,6 +334,24 @@
       const regionButton = e.target.closest('[data-region]');
       const supportButton = e.target.closest('[data-support]');
       const favoriteButton = e.target.closest('[data-favorite]');
+      const heroDirection = e.target.closest('[data-hero-direction]');
+      const heroSlide = e.target.closest('[data-hero-slide]');
+      const heroRegionJobs = e.target.closest('[data-hero-region-jobs]');
+      if (heroDirection) {
+        state.heroIndex += heroDirection.dataset.heroDirection === 'next' ? 1 : -1;
+        renderHeroOpportunity();
+      }
+      if (heroSlide) {
+        state.heroIndex = Number(heroSlide.dataset.heroSlide);
+        renderHeroOpportunity();
+      }
+      if (heroRegionJobs) {
+        const option = [...$('#region-filter').options].find(item => item.value === heroRegionJobs.dataset.heroRegionJobs);
+        if (option) { $('#region-filter').value = option.value; state.filters.region = option.value; }
+        state.visible = 6;
+        renderVacancies();
+        $('#vacancies').scrollIntoView({behavior:'smooth'});
+      }
       if (vacancyButton) {
         const vacancy = data.vacancies.find(v => v.id === Number(vacancyButton.dataset.vacancy));
         openModal(vacancyModal(vacancy));
@@ -436,6 +493,7 @@
   function init() {
     initNavigation();
     populateFilters();
+    renderHeroOpportunity();
     renderStats();
     renderVacancies();
     renderRegions();
