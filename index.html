@@ -34,6 +34,9 @@
   </header>
 
   <main id="main">
+    <div class="demo-notice" role="note">
+      <div class="container"><strong>Демонстрационная версия</strong><span>Вакансии, истории и контакты используются для проверки сценариев и требуют официального подтверждения перед публикацией.</span></div>
+    </div>
     <section class="hero">
       <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
       <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
@@ -62,20 +65,20 @@
           <div class="skyline skyline-front" aria-hidden="true"></div>
           <div class="hero-badge hero-badge-jobs">
             <span class="badge-icon">↗</span>
-            <div><strong>1 240+</strong><small>актуальных вакансий</small></div>
+            <div><strong id="hero-vacancy-count">—</strong><small>вакансий в демокаталоге</small></div>
           </div>
           <div class="hero-badge hero-badge-support">
             <span class="badge-icon">₽</span>
-            <div><strong>до 1 млн ₽</strong><small>поддержка при переезде</small></div>
+            <div><strong id="hero-support-count">—</strong><small>направления поддержки</small></div>
           </div>
           <div class="place-label"><span>●</span> Казань · Татарстан</div>
         </div>
       </div>
-      <div class="container stats-row" aria-label="Ключевые показатели проекта">
-        <div><strong>43</strong><span>муниципальных района</span></div>
-        <div><strong>18</strong><span>направлений работы</span></div>
-        <div><strong>120+</strong><span>мер поддержки</span></div>
-        <div><strong>4,0 млн</strong><span>жителей республики</span></div>
+      <div class="container stats-row" aria-label="Наполнение демонстрационной версии">
+        <div><strong id="stats-regions">—</strong><span>территорий с паспортами</span></div>
+        <div><strong id="stats-categories">—</strong><span>направлений работы</span></div>
+        <div><strong id="stats-support">—</strong><span>категории поддержки</span></div>
+        <div><strong id="stats-stories">—</strong><span>истории переезда</span></div>
       </div>
     </section>
 
@@ -145,7 +148,7 @@
         <div class="support-intro">
           <span class="eyebrow">Переезжайте уверенно</span>
           <h2>Поддержка на новом месте</h2>
-          <p>Республика и работодатели помогают решить главные вопросы переезда — от жилья до профессионального развития.</p>
+          <p>Республика, муниципалитеты и работодатели помогают решить главные вопросы переезда — от жилья до профессионального развития.</p>
           <a class="button button-dark" href="#consultation">Узнать, что доступно мне</a>
         </div>
         <div class="support-grid" id="support-grid"></div>
@@ -210,7 +213,7 @@
       <div><h3>Помощь</h3><a href="#consultation">Получить консультацию</a><a href="#steps">Как переехать</a><button class="footer-chat-button" type="button" data-open-chat>Задать вопрос помощнику</button></div>
       <div><h3>Контакты</h3><a href="tel:+78005553535">8 800 555-35-35</a><a href="mailto:hello@work-tatarstan.ru">hello@work-tatarstan.ru</a><span>Ежедневно, 8:00–20:00</span></div>
     </div>
-    <div class="container footer-bottom"><span>© 2026 Живи и работай в Татарстане</span><a href="#">Политика конфиденциальности</a></div>
+    <div class="container footer-bottom"><span>© 2026 Живи и работай в Татарстане · демонстрационный проект</span><button type="button" data-privacy>Политика конфиденциальности</button></div>
   </footer>
 
   <div class="modal" id="detail-modal" hidden>

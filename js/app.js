@@ -13,6 +13,18 @@
   const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
   const money = value => new Intl.NumberFormat('ru-RU').format(value) + ' ₽';
   const escapeHTML = value => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+  const placeholderImages = {
+    urban: 'assets/images/placeholders/tatarstan-urban.png',
+    tech: 'assets/images/placeholders/tatarstan-tech.png',
+    nature: 'assets/images/placeholders/tatarstan-nature.png'
+  };
+
+  function regionImageSet(region) {
+    if (region.visual === 'innopolis') return [placeholderImages.tech, placeholderImages.urban, placeholderImages.nature];
+    if (['arsk','tukaevsky'].includes(region.visual)) return [placeholderImages.nature, placeholderImages.urban, placeholderImages.tech];
+    if (['chelny','almet','nizhnekamsk'].includes(region.visual)) return [placeholderImages.urban, placeholderImages.tech, placeholderImages.nature];
+    return [placeholderImages.urban, placeholderImages.nature, placeholderImages.tech];
+  }
 
   function initNavigation() {
     const toggle = $('.menu-toggle');
@@ -33,6 +45,16 @@
     const regions = [...new Set(data.vacancies.map(v => v.region))].sort();
     $('#category-filter').insertAdjacentHTML('beforeend', categories.map(item => `<option>${escapeHTML(item)}</option>`).join(''));
     $('#region-filter').insertAdjacentHTML('beforeend', regions.map(item => `<option>${escapeHTML(item)}</option>`).join(''));
+  }
+
+  function renderStats() {
+    const categories = new Set(data.vacancies.map(v => v.category));
+    $('#hero-vacancy-count').textContent = data.vacancies.length;
+    $('#hero-support-count').textContent = data.support.length;
+    $('#stats-regions').textContent = data.regions.length;
+    $('#stats-categories').textContent = categories.size;
+    $('#stats-support').textContent = data.support.length;
+    $('#stats-stories').textContent = data.stories.length;
   }
 
   function salaryLabel(vacancy) {
@@ -131,13 +153,17 @@
   }
 
   function renderRegions() {
-    $('#regions-grid').innerHTML = data.regions.map(region => `<button class="region-card" type="button" data-region="${region.id}" data-visual="${region.visual}" style="--region-accent:${region.accent}">
-      <span class="region-art"></span><span class="region-overlay"></span><span class="region-content"><span class="region-type">${escapeHTML(region.type)}</span><h3>${escapeHTML(region.name)}</h3><p>${escapeHTML(region.lead)}</p><span class="region-meta"><strong>${region.jobs} вакансий</strong><span class="region-arrow">→</span></span></span>
-    </button>`).join('');
+    $('#regions-grid').innerHTML = data.regions.map(region => {
+      const jobs = data.vacancies.filter(v => v.region === region.name).length;
+      const cover = regionImageSet(region)[0];
+      return `<button class="region-card" type="button" data-region="${region.id}" data-visual="${region.visual}" style="--region-accent:${region.accent};--region-image:url('${cover}')">
+      <span class="region-art"></span><span class="region-overlay"></span><span class="region-content"><span class="region-type">${escapeHTML(region.type)}</span><h3>${escapeHTML(region.name)}</h3><p>${escapeHTML(region.lead)}</p><span class="region-meta"><strong>${jobs} ${plural(jobs,['вакансия','вакансии','вакансий'])} в демоверсии</strong><span class="region-arrow">→</span></span></span>
+    </button>`;
+    }).join('');
   }
 
   function renderSupport() {
-    $('#support-grid').innerHTML = data.support.map(item => `<article class="support-card"><span class="support-icon">${item.icon}</span><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.text)}</p><span>${escapeHTML(item.tag)} →</span></article>`).join('');
+    $('#support-grid').innerHTML = data.support.map(item => `<button class="support-card" type="button" data-support="${item.id}"><span class="support-icon">${item.icon}</span><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.text)}</p><span>${escapeHTML(item.tag)} →</span></button>`).join('');
   }
 
   function renderStories() {
@@ -177,17 +203,31 @@
   }
 
   function vacancyModal(v) {
-    return `<span class="modal-kicker">${escapeHTML(v.company)} · ${escapeHTML(v.region)}</span><h2 id="modal-title">${escapeHTML(v.title)}</h2><p class="modal-lead">${escapeHTML(v.description)}</p><div class="modal-facts"><span>${escapeHTML(v.category)}</span><span>${escapeHTML(v.experience)}</span><span>${escapeHTML(v.format)}</span>${v.support?'<span>Поддержка при переезде</span>':''}</div><div class="modal-salary">${salaryLabel(v)} <small>в месяц</small></div><div class="modal-columns"><div><h3>Что важно</h3><ul>${v.requirements.map(item=>`<li>${escapeHTML(item)}</li>`).join('')}</ul></div><div><h3>Что предлагает работодатель</h3><ul>${v.benefits.map(item=>`<li>${escapeHTML(item)}</li>`).join('')}</ul></div></div><button class="button" type="button" data-apply="${v.id}">Откликнуться на вакансию</button>`;
+    const region = data.regions.find(item => item.name === v.region);
+    return `<span class="modal-kicker">${escapeHTML(v.company)} · ${escapeHTML(v.region)}</span><h2 id="modal-title">${escapeHTML(v.title)}</h2><p class="modal-lead">${escapeHTML(v.description)}</p><div class="modal-facts"><span>${escapeHTML(v.category)}</span><span>${escapeHTML(v.experience)}</span><span>${escapeHTML(v.format)}</span>${v.support?'<span>Поддержка при переезде</span>':''}</div><div class="modal-salary">${salaryLabel(v)} <small>в месяц</small></div><div class="modal-columns"><div><h3>Что важно</h3><ul>${v.requirements.map(item=>`<li>${escapeHTML(item)}</li>`).join('')}</ul></div><div><h3>Что предлагает работодатель</h3><ul>${v.benefits.map(item=>`<li>${escapeHTML(item)}</li>`).join('')}</ul></div></div><div class="modal-actions"><button class="button" type="button" data-apply="${v.id}">Откликнуться</button>${region ? `<button class="button button-secondary" type="button" data-region-from-vacancy="${region.id}">Узнать о ${escapeHTML(region.name)}</button>` : ''}</div><p class="modal-disclaimer">Данные вакансии демонстрационные и требуют подтверждения работодателем.</p>`;
   }
 
   function regionModal(region) {
-    return `<div class="region-modal-art" style="--region-accent:${region.accent}"></div><span class="modal-kicker">${escapeHTML(region.type)}</span><h2 id="modal-title">${escapeHTML(region.name)}</h2><p class="modal-lead">${escapeHTML(region.description)}</p><div class="modal-facts">${region.facts.map(f=>`<span>${escapeHTML(f)}</span>`).join('')}</div><button class="button" type="button" data-region-jobs="${escapeHTML(region.name)}">Посмотреть ${region.jobs} вакансий</button>`;
+    const jobs = data.vacancies.filter(v => v.region === region.name).length;
+    const supports = region.supportIds.map(id => data.support.find(item => item.id === id)).filter(Boolean);
+    const images = regionImageSet(region);
+    const livingLabels = {housing:'Жильё',education:'Образование',medicine:'Медицина',transport:'Транспорт'};
+    return `<div class="region-modal-art" style="--region-accent:${region.accent};--region-image:url('${images[0]}')"></div><span class="modal-kicker">${escapeHTML(region.type)} · паспорт территории</span><h2 id="modal-title">${escapeHTML(region.name)}</h2><p class="modal-lead">${escapeHTML(region.description)}</p><div class="passport-gallery" aria-label="Иллюстративная галерея территории">${region.gallery.map((item,index)=>`<figure><img src="${images[index]}" alt="Иллюстративная заглушка: ${escapeHTML(item)}" loading="lazy"><figcaption><strong>${escapeHTML(item)}</strong><small>AI-заглушка, не документальная фотография</small></figcaption></figure>`).join('')}</div><div class="modal-facts">${region.facts.map(f=>`<span>${escapeHTML(f)}</span>`).join('')}</div><h3 class="modal-section-title">Условия для жизни</h3><div class="living-grid">${Object.entries(region.living).map(([key,value])=>`<article><strong>${livingLabels[key]}</strong><p>${escapeHTML(value)}</p></article>`).join('')}</div><h3 class="modal-section-title">Доступные направления поддержки</h3><div class="region-supports">${supports.map(item=>`<button type="button" data-support="${item.id}">${item.icon} ${escapeHTML(item.title)}</button>`).join('')}</div><div class="modal-actions"><button class="button" type="button" data-region-jobs="${escapeHTML(region.name)}">Показать ${jobs} ${plural(jobs,['вакансию','вакансии','вакансий'])}</button><button class="button button-secondary" type="button" data-consult-region="${escapeHTML(region.name)}">Консультация по переезду</button></div>`;
+  }
+
+  function supportModal(item) {
+    return `<span class="modal-kicker">Мера поддержки · требуется официальное подтверждение</span><h2 id="modal-title">${escapeHTML(item.title)}</h2><p class="modal-lead">${escapeHTML(item.text)}</p><div class="modal-facts"><span>${escapeHTML(item.scope)}</span><span>${escapeHTML(item.tag)}</span></div><h3 class="modal-section-title">Кому может подойти</h3><p>${escapeHTML(item.audience)}</p><h3 class="modal-section-title">Что потребуется проверить</h3><ul class="support-conditions">${item.conditions.map(condition=>`<li>${escapeHTML(condition)}</li>`).join('')}</ul><div class="modal-actions"><button class="button" type="button" data-consult-support="${escapeHTML(item.title)}">Уточнить условия</button></div><p class="modal-disclaimer">Точные условия, суммы и документы должны быть сверены с официальной программой и нормативным источником.</p>`;
+  }
+
+  function privacyModal() {
+    return `<span class="modal-kicker">Демонстрационный документ</span><h2 id="modal-title">Политика конфиденциальности</h2><p class="modal-lead">Текущая версия сайта не отправляет и не сохраняет введённые в форму персональные данные. Избранные вакансии сохраняются только на устройстве пользователя в localStorage.</p><h3 class="modal-section-title">Перед публичным запуском</h3><ul class="support-conditions"><li>Указать оператора персональных данных и юридические реквизиты.</li><li>Описать цели, сроки и основания обработки.</li><li>Указать подключённые сервисы аналитики и обработки заявок.</li><li>Добавить порядок отзыва согласия и удаления данных.</li></ul><p class="modal-disclaimer">Этот текст не является готовым юридическим документом.</p>`;
   }
 
   function bindCardsAndModal() {
     document.addEventListener('click', e => {
       const vacancyButton = e.target.closest('[data-vacancy]');
       const regionButton = e.target.closest('[data-region]');
+      const supportButton = e.target.closest('[data-support]');
       const favoriteButton = e.target.closest('[data-favorite]');
       if (vacancyButton) {
         const vacancy = data.vacancies.find(v => v.id === Number(vacancyButton.dataset.vacancy));
@@ -197,7 +237,12 @@
         const region = data.regions.find(r => r.id === regionButton.dataset.region);
         openModal(regionModal(region));
       }
+      if (supportButton) {
+        const support = data.support.find(item => item.id === supportButton.dataset.support);
+        if (support) openModal(supportModal(support));
+      }
       if (favoriteButton) toggleFavorite(Number(favoriteButton.dataset.favorite));
+      if (e.target.closest('[data-privacy]')) openModal(privacyModal());
       if (e.target.closest('[data-close-modal]')) closeModal();
       const apply = e.target.closest('[data-apply]');
       if (apply) {
@@ -214,6 +259,20 @@
         if (option) { $('#region-filter').value = option.value; state.filters.region = option.value; }
         renderVacancies();
         $('#vacancies').scrollIntoView({behavior:'smooth'});
+      }
+      const vacancyRegion = e.target.closest('[data-region-from-vacancy]');
+      if (vacancyRegion) {
+        const region = data.regions.find(item => item.id === vacancyRegion.dataset.regionFromVacancy);
+        if (region) openModal(regionModal(region));
+      }
+      const consultRegion = e.target.closest('[data-consult-region]');
+      const consultSupport = e.target.closest('[data-consult-support]');
+      if (consultRegion || consultSupport) {
+        const subject = consultRegion ? `переезду в ${consultRegion.dataset.consultRegion}` : `мере поддержки «${consultSupport.dataset.consultSupport}»`;
+        closeModal();
+        $('[name="topic"]').value = 'Узнать о мерах поддержки';
+        $('[name="message"]').value = `Нужна консультация по ${subject}.`;
+        $('#consultation').scrollIntoView({behavior:'smooth'});
       }
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#detail-modal').hidden) closeModal(); });
@@ -238,7 +297,7 @@
         if (!fieldValid) valid = false;
       });
       if (!valid) { showToast('Проверьте обязательные поля'); return; }
-      showToast('Заявка сохранена в демонстрационном режиме');
+      showToast('Проверка пройдена. В демоверсии данные не отправляются');
       form.reset();
     });
     $('[name="phone"]').addEventListener('input', e => {
@@ -275,8 +334,19 @@
     function answerQuestion(question) {
       appendMessage(question,'user');
       const normalized = question.toLocaleLowerCase('ru');
+      const region = data.regions.find(item => normalized.includes(item.name.toLocaleLowerCase('ru').replace(' район','')));
+      const category = [...new Set(data.vacancies.map(v=>v.category))].find(item => normalized.includes(item.toLocaleLowerCase('ru')));
       const match = data.faq.map(item => ({item,score:item.keywords.filter(key=>normalized.includes(key)).length})).sort((a,b)=>b.score-a.score)[0];
-      const answer = match && match.score ? match.item.a : 'Пока не нашёл точный ответ. Оставьте заявку на консультацию — специалист свяжется и поможет разобраться.';
+      let answer;
+      if (region) {
+        const jobs = data.vacancies.filter(v=>v.region === region.name).length;
+        answer = `${region.name}: ${region.lead} В демокаталоге сейчас ${jobs} ${plural(jobs,['вакансия','вакансии','вакансий'])}. Откройте паспорт территории в разделе «Города и районы».`;
+      } else if (category) {
+        const jobs = data.vacancies.filter(v=>v.category === category).length;
+        answer = `По направлению «${category}» в демокаталоге ${jobs} ${plural(jobs,['вакансия','вакансии','вакансий'])}. Перейдите к вакансиям и выберите это направление в фильтре.`;
+      } else {
+        answer = match && match.score ? match.item.a : 'Пока не нашёл точный ответ. Оставьте заявку на консультацию — после подключения сервера специалист сможет связаться с вами.';
+      }
       setTimeout(()=>appendMessage(answer,'bot'),300);
     }
     function appendMessage(text,type) {
@@ -300,6 +370,7 @@
   function init() {
     initNavigation();
     populateFilters();
+    renderStats();
     renderVacancies();
     renderRegions();
     renderSupport();
