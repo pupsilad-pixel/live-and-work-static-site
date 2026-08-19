@@ -73,11 +73,11 @@ textarea.input{padding-top:12px;resize:vertical}
 .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(135deg,rgba(0,94,59,.94) 0%,rgba(0,69,41,.89) 52%,rgba(0,0,0,.76) 100%),url('../assets/images/regions/kazan.jpg');background-position:center;background-size:cover;background-repeat:no-repeat}
 .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:52px;min-height:0;padding-bottom:68px}
 .hero-copy{width:100%;color:#fff}
-.hero h1{max-width:none;margin-bottom:24px;color:#fff;font-size:clamp(44px,5.2vw,72px);letter-spacing:-.052em}
+.hero h1{max-width:none;margin-bottom:24px;color:#fff;font-size:clamp(44px,5.2vw,72px);letter-spacing:-.052em;text-align:center}
 .hero h1 em{position:relative;color:#fff;font-style:normal;white-space:nowrap}
 .hero h1 em::after{content:"";position:absolute;left:1%;right:0;bottom:-4px;height:9px;border-top:3px solid #f04b73;border-radius:50%}
 .hero .eyebrow{color:#bfe1d3}
-.hero-copy>p{max-width:none;margin-bottom:28px;color:#d4e8df;font-size:18px}
+.hero-copy>p{max-width:none;margin-bottom:28px;color:#d4e8df;font-size:18px;text-align:center}
 .hero-search{display:flex;align-items:center;width:100%;padding:7px;background:#fff;border-radius:15px;box-shadow:0 20px 55px rgba(0,35,22,.24)}
 .hero-search .search-icon{padding-left:15px;color:var(--green-700);font-size:29px;line-height:1}
 .hero-search input{min-width:0;flex:1;height:50px;padding:0 14px;border:0;outline:0}
