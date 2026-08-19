@@ -15,49 +15,49 @@
   const money = value => new Intl.NumberFormat('ru-RU').format(value) + ' ₽';
   const escapeHTML = value => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
   const placeholderImages = {
-    urban: '/assets/images/placeholders/tatarstan-urban.png',
-    tech: '/assets/images/placeholders/tatarstan-tech.png',
-    nature: '/assets/images/placeholders/tatarstan-nature.png'
+    urban: 'assets/images/placeholders/tatarstan-urban.png',
+    tech: 'assets/images/placeholders/tatarstan-tech.png',
+    nature: 'assets/images/placeholders/tatarstan-nature.png'
   };
   const regionPhotos = {
     kazan: {
-      src: '/assets/images/regions/kazan.jpg',
+      src: 'assets/images/regions/kazan.jpg',
       author: 'Soghomon Matevosyan',
       license: 'CC BY-SA 4.0',
       url: 'https://commons.wikimedia.org/wiki/File:Kazan_panorama_SM_130.jpg'
     },
     chelny: {
-      src: '/assets/images/regions/chelny.jpg',
+      src: 'assets/images/regions/chelny.jpg',
       author: 'Brücke-Osteuropa',
       license: 'Public domain',
       url: 'https://commons.wikimedia.org/wiki/File:Naberezhnye_Tchelny_2.JPG'
     },
     innopolis: {
-      src: '/assets/images/regions/innopolis.jpg',
+      src: 'assets/images/regions/innopolis.jpg',
       author: 'Lesya Polyakova / Innopolis Media',
       license: 'CC BY-SA 4.0',
       url: 'https://commons.wikimedia.org/wiki/File:General_view_of_Innopolis.jpg'
     },
     almet: {
-      src: '/assets/images/regions/almet.jpg',
+      src: 'assets/images/regions/almet.jpg',
       author: 'Марат Сафаров',
       license: 'CC BY-SA 4.0',
       url: 'https://commons.wikimedia.org/wiki/File:Альметьевск._Административные_здания_компании_«Татнефть»_на_фоне_панорамы_города.jpg'
     },
     arsk: {
-      src: '/assets/images/regions/arsk.jpg',
+      src: 'assets/images/regions/arsk.jpg',
       author: 'Тимерхан',
       license: 'CC BY-SA 4.0',
       url: 'https://commons.wikimedia.org/wiki/File:Дом_Советов_в_Арске.jpg'
     },
     tukaevsky: {
-      src: '/assets/images/regions/tukaevsky.jpg',
+      src: 'assets/images/regions/tukaevsky.jpg',
       author: 'Bkdrf',
       license: 'CC BY 4.0',
       url: 'https://commons.wikimedia.org/wiki/File:Sosnovy_Bor_Tatarstan_Aerial_View_(cropped).jpg'
     },
     nizhnekamsk: {
-      src: '/assets/images/regions/nizhnekamsk.jpg',
+      src: 'assets/images/regions/nizhnekamsk.jpg',
       author: 'Brücke-Osteuropa',
       license: 'Public domain',
       url: 'https://commons.wikimedia.org/wiki/File:Nizhnekamsk.jpg'
@@ -260,8 +260,8 @@
     $('#regions-grid').innerHTML = data.regions.map(region => {
       const jobs = data.vacancies.filter(v => v.region === region.name).length;
       const cover = regionImageSet(region)[0];
-      return `<button class="region-card" type="button" data-region="${region.id}" data-visual="${region.visual}" style="--region-accent:${region.accent};--region-image:url('${cover}')">
-      <span class="region-art"></span><span class="region-overlay"></span><span class="region-content"><span class="region-type">${escapeHTML(region.type)}</span><h3>${escapeHTML(region.name)}</h3><p>${escapeHTML(region.lead)}</p><span class="region-meta"><strong>${jobs} ${plural(jobs,['вакансия','вакансии','вакансий'])} в демоверсии</strong><span class="region-arrow">→</span></span></span>
+      return `<button class="region-card" type="button" data-region="${region.id}" data-visual="${region.visual}" style="--region-accent:${region.accent}">
+      <span class="region-art"><img src="${cover}" alt="" loading="lazy"></span><span class="region-overlay"></span><span class="region-content"><span class="region-type">${escapeHTML(region.type)}</span><h3>${escapeHTML(region.name)}</h3><p>${escapeHTML(region.lead)}</p><span class="region-meta"><strong>${jobs} ${plural(jobs,['вакансия','вакансии','вакансий'])} в демоверсии</strong><span class="region-arrow">→</span></span></span>
     </button>`;
     }).join('');
   }
@@ -317,7 +317,7 @@
     const images = regionImageSet(region);
     const photo = regionPhotos[region.visual];
     const livingLabels = {housing:'Жильё',education:'Образование',medicine:'Медицина',transport:'Транспорт'};
-    return `<div class="region-modal-art" style="--region-accent:${region.accent};--region-image:url('${images[0]}')"></div><span class="modal-kicker">${escapeHTML(region.type)} · паспорт территории</span><h2 id="modal-title">${escapeHTML(region.name)}</h2><p class="modal-lead">${escapeHTML(region.description)}</p><div class="passport-gallery" aria-label="Иллюстративная галерея территории">${region.gallery.map((item,index)=>`<figure><img src="${images[index]}" alt="${index === 0 ? `${escapeHTML(region.name)}: городской вид` : `Иллюстративная заглушка: ${escapeHTML(item)}`}" loading="lazy"><figcaption><strong>${index === 0 ? escapeHTML(region.name) : escapeHTML(item)}</strong>${index === 0 && photo ? `<small><a href="${photo.url}" target="_blank" rel="noopener noreferrer">Фото: ${escapeHTML(photo.author)} · ${escapeHTML(photo.license)}</a></small>` : '<small>AI-заглушка, не документальная фотография</small>'}</figcaption></figure>`).join('')}</div><div class="modal-facts">${region.facts.map(f=>`<span>${escapeHTML(f)}</span>`).join('')}</div><h3 class="modal-section-title">Условия для жизни</h3><div class="living-grid">${Object.entries(region.living).map(([key,value])=>`<article><strong>${livingLabels[key]}</strong><p>${escapeHTML(value)}</p></article>`).join('')}</div><h3 class="modal-section-title">Доступные направления поддержки</h3><div class="region-supports">${supports.map(item=>`<button type="button" data-support="${item.id}">${item.icon} ${escapeHTML(item.title)}</button>`).join('')}</div><div class="modal-actions"><button class="button" type="button" data-region-jobs="${escapeHTML(region.name)}">Показать ${jobs} ${plural(jobs,['вакансию','вакансии','вакансий'])}</button><button class="button button-secondary" type="button" data-consult-region="${escapeHTML(region.name)}">Консультация по переезду</button></div>`;
+    return `<div class="region-modal-art" style="--region-accent:${region.accent}"><img src="${images[0]}" alt="${escapeHTML(region.name)}: городской вид"></div><span class="modal-kicker">${escapeHTML(region.type)} · паспорт территории</span><h2 id="modal-title">${escapeHTML(region.name)}</h2><p class="modal-lead">${escapeHTML(region.description)}</p><div class="passport-gallery" aria-label="Иллюстративная галерея территории">${region.gallery.map((item,index)=>`<figure><img src="${images[index]}" alt="${index === 0 ? `${escapeHTML(region.name)}: городской вид` : `Иллюстративная заглушка: ${escapeHTML(item)}`}" loading="lazy"><figcaption><strong>${index === 0 ? escapeHTML(region.name) : escapeHTML(item)}</strong>${index === 0 && photo ? `<small><a href="${photo.url}" target="_blank" rel="noopener noreferrer">Фото: ${escapeHTML(photo.author)} · ${escapeHTML(photo.license)}</a></small>` : '<small>AI-заглушка, не документальная фотография</small>'}</figcaption></figure>`).join('')}</div><div class="modal-facts">${region.facts.map(f=>`<span>${escapeHTML(f)}</span>`).join('')}</div><h3 class="modal-section-title">Условия для жизни</h3><div class="living-grid">${Object.entries(region.living).map(([key,value])=>`<article><strong>${livingLabels[key]}</strong><p>${escapeHTML(value)}</p></article>`).join('')}</div><h3 class="modal-section-title">Доступные направления поддержки</h3><div class="region-supports">${supports.map(item=>`<button type="button" data-support="${item.id}">${item.icon} ${escapeHTML(item.title)}</button>`).join('')}</div><div class="modal-actions"><button class="button" type="button" data-region-jobs="${escapeHTML(region.name)}">Показать ${jobs} ${plural(jobs,['вакансию','вакансии','вакансий'])}</button><button class="button button-secondary" type="button" data-consult-region="${escapeHTML(region.name)}">Консультация по переезду</button></div>`;
   }
 
   function supportModal(item) {
