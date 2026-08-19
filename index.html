@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Вакансии, города и меры поддержки для переезда и работы в Республике Татарстан.">
+  <meta name="theme-color" content="#0c5f42">
+  <title>Живи и работай в Татарстане</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Живи и работай в Татарстане — на главную">
+        <span class="brand-mark" aria-hidden="true">Т</span>
+        <span class="brand-copy"><strong>Живи и работай</strong><small>в Татарстане</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="main-nav" aria-label="Основная навигация">
+        <a href="#vacancies">Вакансии</a>
+        <a href="#regions">Города и районы</a>
+        <a href="#support">Поддержка</a>
+        <a href="#stories">Истории</a>
+      </nav>
+      <a class="button button-small header-action" href="#consultation">Получить консультацию</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
+      <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Республика Татарстан</span>
+          <h1>Работа, ради которой хочется <em>переехать</em></h1>
+          <p>Найдите вакансию, узнайте больше о будущем городе и получите поддержку на каждом этапе переезда.</p>
+          <form class="hero-search" id="hero-search" role="search">
+            <label class="sr-only" for="hero-query">Должность или компания</label>
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="hero-query" name="query" type="search" placeholder="Должность или компания" autocomplete="off">
+            <button class="button" type="submit">Найти работу</button>
+          </form>
+          <div class="popular-searches" aria-label="Популярные направления">
+            <span>Популярное:</span>
+            <button type="button" data-quick-search="IT">IT</button>
+            <button type="button" data-quick-search="Инженерия">Инженерия</button>
+            <button type="button" data-quick-search="Медицина">Медицина</button>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Возможности для жизни и карьеры в Татарстане">
+          <div class="sun" aria-hidden="true"></div>
+          <div class="skyline skyline-back" aria-hidden="true"></div>
+          <div class="skyline skyline-front" aria-hidden="true"></div>
+          <div class="hero-badge hero-badge-jobs">
+            <span class="badge-icon">↗</span>
+            <div><strong>1 240+</strong><small>актуальных вакансий</small></div>
+          </div>
+          <div class="hero-badge hero-badge-support">
+            <span class="badge-icon">₽</span>
+            <div><strong>до 1 млн ₽</strong><small>поддержка при переезде</small></div>
+          </div>
+          <div class="place-label"><span>●</span> Казань · Татарстан</div>
+        </div>
+      </div>
+      <div class="container stats-row" aria-label="Ключевые показатели проекта">
+        <div><strong>43</strong><span>муниципальных района</span></div>
+        <div><strong>18</strong><span>направлений работы</span></div>
+        <div><strong>120+</strong><span>мер поддержки</span></div>
+        <div><strong>4,0 млн</strong><span>жителей республики</span></div>
+      </div>
+    </section>
+
+    <section class="section vacancies-section" id="vacancies">
+      <div class="container">
+        <div class="section-heading section-heading-row">
+          <div><span class="eyebrow">Ваша новая работа</span><h2>Актуальные вакансии</h2></div>
+          <p>Подберите предложение по профессии, опыту и месту, где хотелось бы жить.</p>
+        </div>
+
+        <div class="catalog-layout">
+          <aside class="filter-panel" aria-label="Фильтры вакансий">
+            <div class="filter-panel-head">
+              <h3>Фильтры</h3>
+              <button type="button" class="text-button" id="reset-filters">Сбросить</button>
+            </div>
+            <label class="field-label" for="catalog-query">Поиск</label>
+            <input class="input" id="catalog-query" type="search" placeholder="Например, инженер">
+            <label class="field-label" for="category-filter">Направление</label>
+            <select class="input" id="category-filter"><option value="all">Все направления</option></select>
+            <label class="field-label" for="region-filter">Город или район</label>
+            <select class="input" id="region-filter"><option value="all">Весь Татарстан</option></select>
+            <label class="field-label" for="experience-filter">Опыт</label>
+            <select class="input" id="experience-filter">
+              <option value="all">Любой опыт</option>
+              <option value="Без опыта">Без опыта</option>
+              <option value="1–3 года">1–3 года</option>
+              <option value="3–6 лет">3–6 лет</option>
+            </select>
+            <label class="checkbox-row"><input id="support-filter" type="checkbox"><span>Только с поддержкой</span></label>
+          </aside>
+
+          <div class="catalog-content">
+            <div class="catalog-toolbar">
+              <strong id="vacancy-count" aria-live="polite"></strong>
+              <label>Сортировка
+                <select id="sort-vacancies">
+                  <option value="recommended">По рекомендации</option>
+                  <option value="salary-desc">Сначала высокая зарплата</option>
+                  <option value="newest">Сначала новые</option>
+                </select>
+              </label>
+            </div>
+            <div class="vacancies-grid" id="vacancies-grid"></div>
+            <div class="empty-state" id="vacancies-empty" hidden>
+              <span>⌕</span><h3>Подходящих вакансий пока нет</h3><p>Измените фильтры или оставьте заявку на консультацию.</p>
+              <button class="button button-secondary" type="button" data-reset-filters>Сбросить фильтры</button>
+            </div>
+            <button class="button button-secondary load-more" id="load-more" type="button">Показать ещё</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section regions-section" id="regions">
+      <div class="container">
+        <div class="section-heading section-heading-row light-heading">
+          <div><span class="eyebrow">Выберите своё место</span><h2>Города и районы</h2></div>
+          <p>Не только работа: сравните ритм жизни, инфраструктуру и возможности для семьи.</p>
+        </div>
+        <div class="regions-grid" id="regions-grid"></div>
+      </div>
+    </section>
+
+    <section class="section support-section" id="support">
+      <div class="container support-layout">
+        <div class="support-intro">
+          <span class="eyebrow">Переезжайте уверенно</span>
+          <h2>Поддержка на новом месте</h2>
+          <p>Республика и работодатели помогают решить главные вопросы переезда — от жилья до профессионального развития.</p>
+          <a class="button button-dark" href="#consultation">Узнать, что доступно мне</a>
+        </div>
+        <div class="support-grid" id="support-grid"></div>
+      </div>
+    </section>
+
+    <section class="section steps-section" id="steps">
+      <div class="container">
+        <div class="section-heading centered-heading"><span class="eyebrow">Простой маршрут</span><h2>От интереса до переезда — четыре шага</h2></div>
+        <ol class="steps-list">
+          <li><span>01</span><div><h3>Найдите вакансию</h3><p>Используйте поиск и фильтры по профессии, району и условиям.</p></div></li>
+          <li><span>02</span><div><h3>Откликнитесь</h3><p>Оставьте контакты — работодатель свяжется и расскажет детали.</p></div></li>
+          <li><span>03</span><div><h3>Получите поддержку</h3><p>Специалист подберёт подходящие меры и поможет с документами.</p></div></li>
+          <li><span>04</span><div><h3>Начните новую главу</h3><p>Переезжайте, выходите на работу и обустраивайтесь на новом месте.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section stories-section" id="stories">
+      <div class="container">
+        <div class="section-heading section-heading-row">
+          <div><span class="eyebrow">У них получилось</span><h2>Истории переезда</h2></div>
+          <div class="slider-controls">
+            <button type="button" id="stories-prev" aria-label="Предыдущая история">←</button>
+            <button type="button" id="stories-next" aria-label="Следующая история">→</button>
+          </div>
+        </div>
+        <div class="stories-viewport"><div class="stories-track" id="stories-track"></div></div>
+      </div>
+    </section>
+
+    <section class="section consultation-section" id="consultation">
+      <div class="container consultation-card">
+        <div class="consultation-copy">
+          <span class="eyebrow">Мы рядом</span>
+          <h2>Не знаете, с чего начать?</h2>
+          <p>Оставьте контакты. Консультант поможет подобрать вакансии и расскажет о поддержке при переезде.</p>
+          <div class="contact-links">
+            <a href="tel:+78005553535"><span>☎</span><div><small>Бесплатно по России</small><strong>8 800 555-35-35</strong></div></a>
+            <a href="mailto:hello@work-tatarstan.ru"><span>✉</span><div><small>Электронная почта</small><strong>hello@work-tatarstan.ru</strong></div></a>
+          </div>
+        </div>
+        <form class="consultation-form" id="consultation-form" novalidate>
+          <div class="form-row">
+            <label><span>Ваше имя</span><input class="input" name="name" type="text" autocomplete="name" required placeholder="Как к вам обращаться"></label>
+            <label><span>Телефон</span><input class="input" name="phone" type="tel" autocomplete="tel" required placeholder="+7 999 000-00-00"></label>
+          </div>
+          <label><span>Чем вам помочь?</span><select class="input" name="topic"><option>Подобрать вакансии</option><option>Узнать о мерах поддержки</option><option>Выбрать город или район</option><option>Другое</option></select></label>
+          <label><span>Комментарий</span><textarea class="input" name="message" rows="3" placeholder="Расскажите немного о своей ситуации"></textarea></label>
+          <label class="checkbox-row consent"><input name="consent" type="checkbox" required><span>Согласен на обработку персональных данных</span></label>
+          <button class="button" type="submit">Получить консультацию</button>
+          <p class="form-note">Демонстрационная форма: данные никуда не отправляются.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="brand footer-brand" href="#top"><span class="brand-mark">Т</span><span class="brand-copy"><strong>Живи и работай</strong><small>в Татарстане</small></span></a><p>Проект для тех, кто хочет строить карьеру и жизнь в Республике Татарстан.</p></div>
+      <div><h3>Разделы</h3><a href="#vacancies">Вакансии</a><a href="#regions">Города и районы</a><a href="#support">Меры поддержки</a><a href="#stories">Истории переезда</a></div>
+      <div><h3>Помощь</h3><a href="#consultation">Получить консультацию</a><a href="#steps">Как переехать</a><button class="footer-chat-button" type="button" data-open-chat>Задать вопрос помощнику</button></div>
+      <div><h3>Контакты</h3><a href="tel:+78005553535">8 800 555-35-35</a><a href="mailto:hello@work-tatarstan.ru">hello@work-tatarstan.ru</a><span>Ежедневно, 8:00–20:00</span></div>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 Живи и работай в Татарстане</span><a href="#">Политика конфиденциальности</a></div>
+  </footer>
+
+  <div class="modal" id="detail-modal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" type="button" data-close-modal aria-label="Закрыть">×</button>
+      <div id="modal-content"></div>
+    </section>
+  </div>
+
+  <button class="chat-launcher" type="button" data-open-chat aria-label="Открыть помощника"><span>?</span><strong>Помощник</strong></button>
+  <section class="chat-panel" id="chat-panel" aria-label="Помощник по переезду" hidden>
+    <header><div><span class="chat-avatar">Т</span><div><strong>Помощник по переезду</strong><small><i></i> Отвечает сразу</small></div></div><button type="button" data-close-chat aria-label="Закрыть чат">×</button></header>
+    <div class="chat-messages" id="chat-messages" aria-live="polite">
+      <div class="chat-message bot">Здравствуйте! Помогу найти вакансию, выбрать город или разобраться в мерах поддержки.</div>
+    </div>
+    <div class="quick-questions" id="quick-questions"></div>
+    <form class="chat-form" id="chat-form"><label class="sr-only" for="chat-input">Ваш вопрос</label><input id="chat-input" type="text" placeholder="Напишите вопрос…" autocomplete="off"><button type="submit" aria-label="Отправить">→</button></form>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
